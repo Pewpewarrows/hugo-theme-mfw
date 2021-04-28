@@ -1,0 +1,130 @@
+{{ define "main" }}
+  <article>
+    <header>
+      <h1>{{ partial "page-title-link" (dict "page" .) }}</h1>
+      <span class="text-muted">{{ partial "page-datetime" (dict "page" . "date" .Date) }}</span>
+      <span class="text-muted">&nbsp;—&nbsp;</span>
+      <span class="text-muted">{{ .ReadingTime }} minute read</span>
+      <p>{{ .Description }}</p>
+      {{ if .Params.toc }}
+        <!-- TODO: aside vs nav -->
+        <nav>
+          {{ .TableOfContents }}
+        </nav>
+      {{ end }}
+    </header>
+
+    {{ .Content }}
+
+    <footer>
+      <hr>
+      <span>Published: {{ partial "page-datetime" (dict "page" . "date" .Date) }}</span>
+      {{/*
+      TODO: may need this to account for slight drift between dev/build machines?
+      {{ $hourInSec := 3600 }}
+      {{ if gt .Lastmod (add (time .Date).Unix $hourInSec) }}
+      {{ end }}
+      */}}
+      {{ if ne .Date .Lastmod }}
+        <span>Last Updated: {{ partial "page-datetime" (dict "page" . "date" .Lastmod) }}</span>
+      {{ end }}
+      {{ if not .ExpiryDate.IsZero }}
+        <span>Expires: {{ partial "page-datetime" (dict "page" . "date" .ExpiryDate) }}</span>
+      {{ end }}
+
+      <span>{{ .WordCount }} word{{ if ne .WordCount 1 }}s{{ end }}</span>
+      <span>about {{ .FuzzyWordCount }} word{{ if ne .FuzzyWordCount 1 }}s{{ end }}</span>
+
+      <!-- TODO: relLangURL for all of these? -->
+
+      <!-- TODO: show place within series (as a taxonomy?) -->
+
+      {{ with .Params.categories }}
+        <span>
+          {{ if eq (len .) 1 }}category{{ else }}categories{{ end }}:
+          <ul class="unstyled inline">
+            {{ range . }}
+              <li><a href="{{ "categories" | relURL}}/{{ . | urlize }}/">{{ . }}</a></li>
+            {{ end }}
+          </ul>
+        </span>
+      {{ end }}
+
+      {{ with .Keywords }}
+        <span>
+          keyword{{ if ne (len .) 1 }}s{{ end }}:
+          <ul class="unstyled inline">
+            {{ range . }}
+              <li>{{ . }}</li>
+            {{ end }}
+          </ul>
+        </span>
+      {{ end }}
+
+      <!-- TODO: does this work now instead of with .Params.tags -->
+      <!-- TODO: do this style for categories above -->
+      {{ with (.GetTerms "tags") }}
+        <span>
+          tagged:
+          <ul class="unstyled inline">
+            {{ range . }}
+              <!-- TODO: determine is RelPermalink is good enough -->
+              <!-- TODO: just use partial "page-title-link"? -->
+              <!-- <li><a href="{{ "tags" | relURL }}/{{ . | urlize }}/">{{ . }}</a></li> -->
+              <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+            {{ end }}
+          </ul>
+        </span>
+      {{ end }}
+
+      <!-- TODO: .OutputFormats -->
+      <!-- TODO: .Pages -->
+      <!-- TODO: .Resources -->
+
+      {{ if or .PrevInSection .NextInSection }}
+        <section class="clearfix">
+          {{ with .PrevInSection }}
+            {{ partial "page-title-link" (dict "page" . "extraClasses" "float-left" "prefix" "←‹ ") }}
+          {{ end }}
+          {{ with .NextInSection }}
+            {{ partial "page-title-link" (dict "page" . "extraClasses" "float-right" "suffix" " ›→") }}
+          {{ end }}
+        </section>
+      {{ end }}
+
+      {{ with .Translations }}
+        <span>
+          translated:
+          <ul class="unstyled inline">
+            {{ range . }}
+              <li><a href="TK">translation-lang</a></li>
+            {{ end }}
+          </ul>
+        </span>
+      {{ end }}
+
+      {{ with (.Site.RegularPages.Related . | first 5) }}
+        <!-- TODO: h2? also use header tags for other footer content? -->
+        <h3>Related</h3>
+        <ul>
+          {{ range . }}
+            <li>{{ partial "page-title-link" (dict "page" .) }}</li>
+          {{ end }}
+        </ul>
+      {{ end }}
+
+      <!-- TODO: offer author card as option, maybe default to multiple authors or not, or custom author info in frontmmatter, what about guest authors on personal blog? -->
+      {{/*
+      <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+          <span itemprop="name">
+              <a href="{{ .Params.profile | default .Site.Author.profile | default "#" }}" itemprop="url" rel="author">{{ .Params.author | default .Site.Author.name }}</a>
+          </span>
+      </span>
+
+      <address class="vcard author">
+        By <a href="">author-name</a>
+      </address>
+      */}}
+    </footer>
+  </article>
+{{ end }}

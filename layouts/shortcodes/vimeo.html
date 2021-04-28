@@ -1,0 +1,5 @@
+{{ if not .Site.IsServer }}
+  {{ template "_internal/shortcodes/vimeo.html" . }}
+{{ else }}
+  <pre>Placeholder Vimeo embed: {{ .Get 0 }}</pre>
+{{ end }}

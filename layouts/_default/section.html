@@ -1,0 +1,22 @@
+{{ define "main" }}
+  <header>
+    <!-- TODO: custom section title frontmatter as explained at https://gohugo.io/templates/section-templates/#example-using-sitegetpage -->
+    <h1>{{ .Title }}</h1> <!-- TODO: RelPermalink -->
+    <!-- TODO: aside vs nav -->
+    <nav>
+      <!-- TODO: does TOC belong here -->
+      {{ .TableOfContents }}
+    </nav>
+  </header>
+  {{ .Content }}
+  <section>
+    <!-- TODO: offer summary article vs dl vs ol -->
+    {{/* .Render "summary" */}}
+    <dl>
+      {{ range .Paginator.Pages }}
+        {{ .Render "description" }}
+      {{ end }}
+    </dl>
+    {{ partial "pagination" . }}
+  </section>
+{{ end }}

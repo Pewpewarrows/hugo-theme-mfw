@@ -1,0 +1,42 @@
+{{ define "main" }}
+  <header>
+    <h1>{{ .Title }}</h1> <!-- TODO: RelPermalink -->
+    <!-- TODO: aside vs nav -->
+    <nav>
+      <!-- TODO: does TOC belong here -->
+      {{ .TableOfContents }}
+    </nav>
+  </header>
+  {{ .Content }}
+  <section>
+    <!-- TODO: offer various views: Alphabetical, ByCount, default to Alphabetical with in-page link to ByCount, but have config option to swap those defaults -->
+    <dl>
+      {{ $data := .Data }}
+      {{ range .Data.Terms.ByCount }}
+        <!-- TODO: determine if RelPermalink is good enough -->
+        <!-- TODO: just use partial "page-title-link"? -->
+        <!-- <dt><a href="/{{ $data.Plural }}/{{ .Name | urlize }}/">{{ .Name }}</a></dt> -->
+        <!-- TODO: .Page.LinkTitle vs .Page.Title vs .Name -->
+        <dt><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></dt>
+        <!-- TODO: grab the right name for the term, don't hardcode "post" -->
+        <dd>{{ .Count }} post{{ if ne .Count 1 }}s{{ end }}</dd>
+      {{ end }}
+      <!-- TODO: try to get pagination working https://discourse.gohugo.io/t/using-pagination-with-terms/7947 -->
+      {{/*
+      <hr>
+      {{ range .Pages }}
+        <dt><a href="/{{ $data.Plural }}/{{ .Name | urlize }}/">{{ .Name }}</a></dt>
+        <dd>{{ .Count }} post{{ if ne .Count 1 }}s{{ end }}</dd>
+      {{ end }}
+      */}}
+      {{/*
+      {{ $paginator := .Paginate .Data.Terms.ByCount.Pages }}
+      {{ range $paginator.Pages }}
+        <dt><a href="/{{ $data.Plural }}/{{ .Name | urlize }}/">{{ .Name }}</a></dt>
+        <dd>{{ .Count }} post{{ if ne .Count 1 }}s{{ end }}</dd>
+      {{ end }}
+      {{ partial "pagination" . }}
+      */}}
+    </dl>
+  </section>
+{{ end }}

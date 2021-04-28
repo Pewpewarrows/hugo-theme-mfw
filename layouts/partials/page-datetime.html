@@ -1,0 +1,19 @@
+{{/*
+partial input must be a dict with keys:
+
+- "page": page being referenced
+- "date": time to render
+
+usage:
+
+{{ partial "page-datetime" (dict "page" . "date" .Date) }}
+*/}}
+<!-- TODO: see if we can default to an input of . -->
+{{ $page := .page }}
+{{ $date := .date }}
+{{/*
+TODO: figure out this attempt to get ISO8601 from Scratch
+{{ printf "%#v" ($page.Scratch.Get "ISO8601") }}
+<time datetime="{{ $date.Format ($page.Scratch.Get "ISO8601") }}">{{ $date.Format (default $page.Site.Data.default.dateform $page.Site.Params.dateform) }}</time>
+*/}}
+<time datetime="{{ $date.Format $page.Site.Data.default.ISO8601 }}">{{ $date.Format (default $page.Site.Data.default.dateform $page.Site.Params.dateform) }}</time>

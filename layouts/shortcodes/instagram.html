@@ -1,0 +1,10 @@
+{{ if not .Site.IsServer }}
+  {{/*
+  TODO: instagram shortcodes may now require developer account access tokens,
+  see for more info and potential workarounds:
+  https://github.com/gohugoio/hugo/issues/7879
+  {{ template "_internal/shortcodes/instagram.html" . }}
+  */}}
+{{ else }}
+  <pre>Placeholder Instagram embed: {{ .Get 0 }}</pre>
+{{ end }}

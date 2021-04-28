@@ -1,0 +1,253 @@
+{{ .Scratch.Set "global-context" $ }}
+<!-- TODO: this ISO8601 scratch is sometimes nil in list views, why? -->
+{{ .Scratch.Set "ISO8601" "2006-01-02T15:04:05-0700" }}
+<!doctype html>
+<!-- TODO: get defaultContentLanguage working -->
+<!-- TODO: prefix="og: http://ogp.me/ns#" -->
+<html class="no-js" lang="{{ .Site.Data.defaultContentLanguage }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- TODO: IE compatibility mode? -->
+
+    <!-- TODO: conditional/default .Title -->
+    <title>{{ .Title }} ·• {{ .Site.Title }}</title>
+    <!-- TODO: &middot; vs &bull; above, respectively -->
+
+    <!-- <meta name="HandheldFriendly" content="True"> -->
+    <!-- <meta name="MobileOptimized" content="320"> -->
+
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+    <meta name="keywords" content="TK">
+    <meta name="author" content="TK">
+    {{ hugo.Generator }}
+    <!-- <meta name="theme-color" content="#fafafa"> -->
+    <!-- Be sure to fill this in after registering with Google Webmaster Tools -->
+    <!-- <meta name="google-site-verification" content=""> -->
+
+    <base href="{{ .Site.BaseURL }}">
+    <link href="{{ .Permalink }}" rel="canonical">
+
+    <!-- <link href="//example.com" rel="dns-prefetch"> -->
+    <!-- <link href="/favicon.ico" rel="shortcut icon"> -->
+    <!-- <link href="/favicon.svg" rel="icon" type="image/svg+xml"> -->
+    <!-- <link href="/images/touch-icon.png" rel="apple-touch-icon"> -->
+    <!-- <link href="/images/touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"> -->
+    <!-- <link href="/images/touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"> -->
+    <link href="/sitemap.xml" title="{{ .Site.Title }} Sitemap" rel="sitemap" type="application/xml">
+    <!-- TODO: guard this with some variable check -->
+    <link href="/sitemapindex.xml" title="{{ .Site.Title }} Sitemap Index" rel="sitemap" type="application/xml">
+
+    <!-- <link type="application/atom+xml" href="/atom.xml" title="Sitename ATOM Feed" rel="alternate"> -->
+    <!-- TODO: place links to specific sections or taxonomy lists/terms -->
+    <!-- TODO: RelPermalink ? -->
+    {{ range .AlternativeOutputFormats }}
+    <link type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Site.Title }} RSS Feed" rel="{{ .Rel }}">
+    {{ end }}
+
+    {{ template "_internal/schema.html" . }}
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/twitter_cards.html" . }}
+
+    <!-- TODO: opensearch plugin -->
+    <!-- TODO: https://htmlhead.dev/ -->
+
+    <!-- <link href="/style.css?v=hash-or-timestamp" rel="stylesheet"> -->
+    <!-- TODO: do performance evaluation on embedded vs heavily cached external asset, especially for subsequent on-site page views -->
+    <!-- TODO: media="print" stylesheet -->
+    <!-- https://www.matuzo.at/blog/i-totally-forgot-about-print-style-sheets/ -->
+    <style type="text/css">
+      /* TODO: get these into rem/em */
+
+      body {
+        max-width: 650px; /* max-width: 73%; */
+        padding: 0 10px;
+        margin: 40px auto; /* margin: 5% auto; */
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          'Noto Sans',
+          sans-serif,
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji'; /* font: 18px/1.5 ... */
+
+        font-size: 18px; /* font-size: 16px; */
+        line-height: 1.6; /* line-height: 1.8; */
+        color: rgba(0, 0, 0, 0.87); /* color: #444 or #454545; */
+        text-shadow: 0 1px 0 #fff;
+        background: #f2f2f2;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.2;
+      }
+
+      code {
+        background: #fff;
+      }
+
+      a {
+        color: #444;
+        text-decoration: none;
+        border-bottom: 1px solid #444;
+      }
+
+      a:hover {
+        border-bottom: 0;
+      }
+
+      .text-muted {
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      .disabled {
+        color: rgba(0, 0, 0, 0.38);
+      }
+
+      .unstyled {
+        padding-left: 0;
+        list-style: none;
+      }
+
+      .inline {
+        display: inline-block;
+      }
+
+      .inline li {
+        display: inline-block;
+
+        /*
+        &:not(:last-child) {
+          margin-right: 0.5rem !default;
+        }
+        */
+      }
+
+      .float-left {
+        float: left;
+      }
+
+      .float-right {
+        float: right;
+      }
+
+      /* self-clearing fix: nicolasgallagher.com/micro-clearfix-hack/ */
+      .clearfix::before,
+      .clearfix::after {
+        display: table;
+        overflow: hidden;
+        content: '';
+      }
+
+      .clearfix::after {
+        clear: both;
+      }
+
+      .js .jsnotice {
+        display: none;
+      }
+
+      .no-js .jsnotice {
+        display: block;
+      }
+
+      .cc {
+        /* TODO: derive these, and dark mode */
+        display: inline-block;
+        width: 30px;
+        height: 31px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 496 512'%3E%3Cpath d='M245.83 214.87l-33.22 17.28c-9.43-19.58-25.24-19.93-27.46-19.93-22.13 0-33.22 14.61-33.22 43.84 0 23.57 9.21 43.84 33.22 43.84 14.47 0 24.65-7.09 30.57-21.26l30.55 15.5c-6.17 11.51-25.69 38.98-65.1 38.98-22.6 0-73.96-10.32-73.96-77.05 0-58.69 43-77.06 72.63-77.06 30.72-.01 52.7 11.95 65.99 35.86zm143.05 0l-32.78 17.28c-9.5-19.77-25.72-19.93-27.9-19.93-22.14 0-33.22 14.61-33.22 43.84 0 23.55 9.23 43.84 33.22 43.84 14.45 0 24.65-7.09 30.54-21.26l31 15.5c-2.1 3.75-21.39 38.98-65.09 38.98-22.69 0-73.96-9.87-73.96-77.05 0-58.67 42.97-77.06 72.63-77.06 30.71-.01 52.58 11.95 65.56 35.86zM247.56 8.05C104.74 8.05 0 123.11 0 256.05c0 138.49 113.6 248 247.56 248 129.93 0 248.44-100.87 248.44-248 0-137.87-106.62-248-248.44-248zm.87 450.81c-112.54 0-203.7-93.04-203.7-202.81 0-105.42 85.43-203.27 203.72-203.27 112.53 0 202.82 89.46 202.82 203.26-.01 121.69-99.68 202.82-202.84 202.82z'/%3E%3C/svg%3E%0A");
+      }
+
+      .cc-by {
+        /* TODO: derive these, and dark mode */
+        display: inline-block;
+        width: 30px;
+        height: 31px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 496 512'%3E%3Cpath d='M314.9 194.4v101.4h-28.3v120.5h-77.1V295.9h-28.3V194.4c0-4.4 1.6-8.2 4.6-11.3 3.1-3.1 6.9-4.7 11.3-4.7H299c4.1 0 7.8 1.6 11.1 4.7 3.1 3.2 4.8 6.9 4.8 11.3zm-101.5-63.7c0-23.3 11.5-35 34.5-35s34.5 11.7 34.5 35c0 23-11.5 34.5-34.5 34.5s-34.5-11.5-34.5-34.5zM247.6 8C389.4 8 496 118.1 496 256c0 147.1-118.5 248-248.4 248C113.6 504 0 394.5 0 256 0 123.1 104.7 8 247.6 8zm.8 44.7C130.2 52.7 44.7 150.6 44.7 256c0 109.8 91.2 202.8 203.7 202.8 103.2 0 202.8-81.1 202.8-202.8.1-113.8-90.2-203.3-202.8-203.3z'/%3E%3C/svg%3E%0A");
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          color: rgba(255, 255, 255, 0.87);
+          text-shadow: none;
+          background: #444;
+        }
+
+        a:link {
+          color: #5bf;
+        }
+
+        a:visited {
+          color: #ccf;
+        }
+
+        .text-muted {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .disabled {
+          color: rgba(255, 255, 255, 0.38);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="site-header">
+      <!-- <a class="site-logo" href="/"><img alt="Sitename Logo" src="/logo.png"></a> -->
+      <a class="site-title" href="/">{{ .Site.Title }}</a>
+      {{ partial "site-nav" . }}
+      <!-- TODO: breadcrumbs -->
+      <!-- https://gohugo.io/content-management/sections/#example-breadcrumb-navigation -->
+    </header>
+
+    <main id="site-main" aria-role="main">
+      {{ block "main" . }}
+      {{ end }}
+      <!-- TODO: jsnotice -->
+    </main>
+
+    <footer id="site-footer">
+      <hr>
+      <small>
+        ©
+        <!-- TODO: still doesn't pull the author name from "Hugo Themes" example site -->
+        {{ .Site.Params.author | default .Site.Author.name | default .Site.Author | default .Site.Title }},
+        <!-- TODO: config for initial copyright year -->
+        2020{{ if gt now.Year 2020 }}–{{ now.Format "2006" }}{{ end }}.
+        <a href="https://creativecommons.org/licenses/by/4.0/" title="Creative Commons Attribution 4.0 International (CC BY 4.0)">Some rights reserved.</a>
+        <!-- , please attribute properly and link back. -->
+        <!-- TODO: {{ .Site.Copyright }} -->
+        {{/*
+        {{ with .Site.Params.footerCopyright }}
+          {{ . | safeHTML }}
+        {{ end }}
+        */}}
+        <!-- TODO: accessibility here -->
+        <!-- <span class="cc"></span>&nbsp;<span class="cc-by"></span> -->
+        <!-- TODO: move these to colophone page -->
+        <!-- This website is <a href="github-url">open-source</a>. -->
+        <!-- Proudly powered by <a href="TK">Hugo</a> and hosted by <a href="TK">TBD</a>. -->
+        <!-- TODO: translation multilingual switcher -->
+      </small>
+    </footer>
+
+    <!-- TODO: django-debug-toolbar like sidebar showing printf of all variables on the page, including Hugo ones, build.writeStats file reading -->
+
+    <!-- TODO: type="module" in the <head> instead? -->
+    <script type="text/javascript">
+      var $html = document.documentElement;
+      $html.classList.remove("no-js");
+      $html.classList.add("js");
+    </script>
+  </body>
+</html>

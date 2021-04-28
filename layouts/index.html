@@ -1,0 +1,20 @@
+{{ define "main" }}
+  <!-- TODO: itemscope="" itemtype="https://schema.org/Blog" or JSON-LD -->
+  <header>
+    <h1>{{ .Title }}</h1> <!-- TODO: RelPermalink -->
+    <!-- TODO: aside vs nav -->
+    <nav>
+      <!-- TODO: does TOC belong here -->
+      {{ .TableOfContents }}
+    </nav>
+  </header>
+  {{.Content}}
+  <section>
+    <!-- TODO: have partials for each of these components/widgets, allow user to mix and reorder by overriding this template, also allows for building nice org/product page via new taxonomies like carousel/features/testimonials/clients -->
+    {{ range first 10 .Site.RegularPages }}
+    {{/* range first 10 .Data.Pages */}}
+    {{/* $pag := .Paginate (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) */}}
+      {{ .Render "summary"}}
+    {{ end }}
+  </section>
+{{ end }}

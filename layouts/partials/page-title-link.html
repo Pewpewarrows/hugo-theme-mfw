@@ -1,0 +1,21 @@
+{{/*
+partial input must be a dict with keys:
+
+- "page": page being referenced
+
+and may contain additional keys:
+
+- "extraClasses": class names to place on the <a> link tag
+- "prefix": text to come before the page title
+- "suffix": text to come after the page title
+
+usage:
+
+{{ partial "page-title-link" (dict "page" .) }}
+*/}}
+<!-- TODO: see if we can default to an input of . -->
+{{ $ := (.Scratch.Get "global-context") }}
+{{ $page := .page }}
+{{ $isCurrentUrl := (eq $.Permalink $page.Permalink) }}
+{{ if $page.Draft }}(DRAFT) {{ else if gt $page.PublishDate now }}(UNPUBLISHED) {{ end }}
+  <a class="{{ default "" .extraClasses }}" href="{{ $page.RelPermalink }}" title="{{ if $isCurrentUrl }}Permalink to {{ end }}{{ $page.LinkTitle }}"{{ if $isCurrentUrl }} rel="bookmark"{{ end }}>{{ safeHTML (default "" .prefix) }}{{ if $isCurrentUrl }}{{ $page.Title }}{{ else }}{{ $page.LinkTitle }}{{ end }}{{ safeHTML (default "" .suffix) }}</a>

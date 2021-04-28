@@ -1,0 +1,47 @@
+<nav>
+  <ul class="unstyled inline">
+    {{ $currentPage := . }}
+    <!-- TODO: .Site.Menus.main.ByWeight -->
+    {{ range .Site.Menus.main }}
+    {{ if .HasChildren }}
+    <li class="{{ if $currentPage.HasMenuCurrent "main" . }}active{{ end }}">
+      <a href="TODO" title="{{ .Title }}">
+        {{ .Pre }}
+        <span>{{ .Name }}</span>
+        {{- with .Page -}}
+        {{- end -}}
+      </a>
+    </li>
+    <ul>
+      {{ range .Children }}
+      <li class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}">
+        <a href="{{ .URL }}" title="{{ .Title }}">
+          {{ .Pre }}
+          <span>{{ .Name }}</span>
+          {{- with .Page -}}
+          {{- end -}}
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+    {{ else }}
+    <li class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}">
+      <a href="{{ .URL }}" title="{{ .Title }}">
+        {{ .Pre }}
+        <span>{{ .Name }}</span>
+        {{- with .Page -}}
+        {{- end -}}
+      </a>
+    </li>
+    {{ end }}
+    {{ end }}
+    <!-- TODO: active -->
+    <li class="{{ if false }}active{{ end }}">
+      <a href="{{ "categories" | relURL }}/">Categories</a>
+    </li>
+    <!-- TODO: active -->
+    <li class="{{ if false }}active{{ end }}">
+      <a href="{{ "tags" | relURL }}/">Tags</a>
+    </li>
+  </ul>
+</nav>

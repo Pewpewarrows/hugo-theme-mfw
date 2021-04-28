@@ -1,0 +1,23 @@
+{{ define "main" }}
+  <header>
+    <!-- TODO: separate template for Archive page of posts, or detect if looking at posts in this template -->
+    <!-- for archive, use .Site.RegularPages.GroupByPublishDate "2006" and inner .Pages.GroupByDate "January" -->
+    <!-- <h1>Archive</h1> -->
+    <h1>{{ .Title }}</h1> <!-- TODO: RelPermalink -->
+    <!-- TODO: aside vs nav -->
+    <nav>
+      <!-- TODO: does TOC belong here -->
+      {{ .TableOfContents }}
+    </nav>
+  </header>
+  {{ .Content }}
+  <section>
+    <!-- TODO: offer dl vs ol -->
+    <dl>
+      {{ range .Paginator.Pages }}
+        {{ .Render "description" }}
+      {{ end }}
+    </dl>
+    {{ partial "pagination" . }}
+  </section>
+{{ end }}
