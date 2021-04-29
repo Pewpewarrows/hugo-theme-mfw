@@ -2,12 +2,10 @@
   <header>
     <h2>{{ partial "page-title-link" (dict "page" .) }}</h2>
     <span class="text-muted">{{ partial "page-datetime" (dict "page" . "date" .Date) }}</span>
-    <!-- TODO: use unicode instead of &mdash; -->
-    <span class="text-muted">&nbsp;&mdash;&nbsp;</span>
+    <span class="text-muted">&nbsp;—&nbsp;</span>
     <span class="text-muted">{{ .ReadingTime }} minute read</span>
     <p>{{ .Description }}</p>
   </header>
-  <!-- TODO: itemprop="blogPost" itemscope="" itemtype="https://schema.org/BlogPosting" -->
   {{ .Summary }}
   {{ if .Truncated }}
     <footer>

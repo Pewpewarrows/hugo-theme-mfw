@@ -1,7 +1,6 @@
 {{ define "main" }}
   <header>
     <h1>{{ .Title }}</h1> <!-- TODO: RelPermalink -->
-    <!-- TODO: aside vs nav -->
     <nav>
       <!-- TODO: does TOC belong here -->
       {{ .TableOfContents }}
@@ -13,7 +12,6 @@
     <dl>
       {{ $data := .Data }}
       {{ range .Data.Terms.ByCount }}
-        <!-- TODO: determine if RelPermalink is good enough -->
         <!-- TODO: just use partial "page-title-link"? -->
         <!-- <dt><a href="/{{ $data.Plural }}/{{ .Name | urlize }}/">{{ .Name }}</a></dt> -->
         <!-- TODO: .Page.LinkTitle vs .Page.Title vs .Name -->

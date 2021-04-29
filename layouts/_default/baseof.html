@@ -1,6 +1,8 @@
 {{ .Scratch.Set "global-context" $ }}
 <!-- TODO: this ISO8601 scratch is sometimes nil in list views, why? -->
 {{ .Scratch.Set "ISO8601" "2006-01-02T15:04:05-0700" }}
+<!-- TODO: still doesn't pull the author name from "Hugo Themes" example site -->
+{{ $author = .Site.Params.author | default .Site.Author.name | default .Site.Author }}
 <!doctype html>
 <!-- TODO: get defaultContentLanguage working -->
 <!-- TODO: prefix="og: http://ogp.me/ns#" -->
@@ -9,25 +11,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- TODO: IE compatibility mode? -->
-
-    <!-- TODO: conditional/default .Title -->
-    <title>{{ .Title }} ·• {{ .Site.Title }}</title>
-    <!-- TODO: &middot; vs &bull; above, respectively -->
-
-    <!-- <meta name="HandheldFriendly" content="True"> -->
-    <!-- <meta name="MobileOptimized" content="320"> -->
+    <!-- TODO: configurable titleSeparator -->
+    <!-- TODO: show page number if applicable -->
+    <title>{{ with .Title }}{{ . }} · {{ end }}{{ .Site.Title }}</title>
 
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
-    <meta name="keywords" content="TK">
-    <meta name="author" content="TK">
+    <!-- TODO: also append suffix of global keywords from config -->
+    <!-- TODO: check if delimit can be used instead of printf as well -->
+    <meta name="keywords" content="{{ if .IsPage }}{{ delimit .Params.tags "," }}{{ else }}{{ range .Site.Taxonomies }}{{ range . }}{{ printf "%s," . }}{{ end }}{{ end }}{{ end }}">
+    {{ with $author }}
+    <meta name="author" content="{{ . }}">
+    {{ end }}
     {{ hugo.Generator }}
-    <!-- <meta name="theme-color" content="#fafafa"> -->
-    <!-- Be sure to fill this in after registering with Google Webmaster Tools -->
-    <!-- <meta name="google-site-verification" content=""> -->
+    {{ with .Site.Params.themeColor }}
+    <meta name="theme-color" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.googleSiteVerification }}
+    <meta name="google-site-verification" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.bingSiteVerification }}
+    <meta name="msvalidate.01" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.alexaSiteVerification }}
+    <meta name="alexaVerifyID" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.yandexSiteVerification }}
+    <meta name="yandex-verification" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.naverSiteVerification }}
+    <meta name="naver-site-verification" content="{{ . }}">
+    {{ end }}
+    {{ with .Site.Params.baiduSiteVerification }}
+    <meta name="baidu-site-verification" content="{{ . }}">
+    {{ end }}
 
     <base href="{{ .Site.BaseURL }}">
     <link href="{{ .Permalink }}" rel="canonical">
+    {{ if .HasPrev }}<link href="{{ .Prev.URL }}" rel="prev">{{ end }}
+    {{ if .HasNext }}<link href="{{ .Next.URL }}" rel="next">{{ end }}
 
     <!-- <link href="//example.com" rel="dns-prefetch"> -->
     <!-- <link href="/favicon.ico" rel="shortcut icon"> -->
@@ -36,16 +57,18 @@
     <!-- <link href="/images/touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72"> -->
     <!-- <link href="/images/touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114"> -->
     <link href="/sitemap.xml" title="{{ .Site.Title }} Sitemap" rel="sitemap" type="application/xml">
-    <!-- TODO: guard this with some variable check -->
+    <!-- TODO: guard this with some variable check? -->
     <link href="/sitemapindex.xml" title="{{ .Site.Title }} Sitemap Index" rel="sitemap" type="application/xml">
-
-    <!-- <link type="application/atom+xml" href="/atom.xml" title="Sitename ATOM Feed" rel="alternate"> -->
+    
+    <!-- TODO: global feeds as well as specific ones for series or taxonomies -->
     <!-- TODO: place links to specific sections or taxonomy lists/terms -->
-    <!-- TODO: RelPermalink ? -->
     {{ range .AlternativeOutputFormats }}
-    <link type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Site.Title }} RSS Feed" rel="{{ .Rel }}">
+    <link type="{{ .MediaType.Type }}" href="{{ .RelPermalink }}" title="{{ $.Site.Title }} RSS Feed" rel="{{ .Rel }}">
     {{ end }}
+    <!-- TODO: switch to ATOM feeds instead of RSS -->
+    <!-- <link href="/atom.xml" title="{{ .Site.Title }} ATOM Feed" rel="alternate" type="application/atom+xml"> -->
 
+    <!-- TODO: default templates may not have all elements, such as twitter:creator or fb:app_id -->
     {{ template "_internal/schema.html" . }}
     {{ template "_internal/opengraph.html" . }}
     {{ template "_internal/twitter_cards.html" . }}
@@ -61,7 +84,7 @@
       /* TODO: get these into rem/em */
 
       body {
-        max-width: 650px; /* max-width: 73%; */
+        max-width: 650px; /* max-width: 73%; max-width: 50em; */
         padding: 0 10px;
         margin: 40px auto; /* margin: 5% auto; */
         font-family:
@@ -81,24 +104,39 @@
         font-size: 18px; /* font-size: 16px; */
         line-height: 1.6; /* line-height: 1.8; */
         color: rgba(0, 0, 0, 0.87); /* color: #444 or #454545; */
-        text-shadow: 0 1px 0 #fff;
-        background: #f2f2f2;
+        text-shadow: 0 1px 0 rgb(255, 255, 255);
+        background: rgb(242, 242, 242);
       }
 
       h1,
       h2,
       h3 {
+        /* padding-top: 1em; */
+        /* margin-top: 1em; */
         line-height: 1.2;
       }
 
+      /* also pre? */
       code {
-        background: #fff;
+        /* padding: 2px 4px; */
+        /* vertical-align: text-bottom; */
+        background: rgb(255, 255, 255);
+      }
+      
+      code {
+        /* padding: 2px 4px; */
+        /* vertical-align: text-bottom; */
+      }
+      
+      pre {
+        /* padding: 1em; */
+        /* border-left: 2px solid rgb(102, 153, 204); */
       }
 
       a {
-        color: #444;
+        color: rgb(68, 68, 68);
         text-decoration: none;
-        border-bottom: 1px solid #444;
+        border-bottom: 1px solid rgb(68, 68, 68);
       }
 
       a:hover {
@@ -180,15 +218,15 @@
         body {
           color: rgba(255, 255, 255, 0.87);
           text-shadow: none;
-          background: #444;
+          background: rgb(68, 68, 68);
         }
 
         a:link {
-          color: #5bf;
+          color: rgb(85, 187, 255);
         }
 
         a:visited {
-          color: #ccf;
+          color: rgb(204, 204, 255);
         }
 
         .text-muted {
@@ -213,17 +251,20 @@
     <main id="site-main" aria-role="main">
       {{ block "main" . }}
       {{ end }}
-      <!-- TODO: jsnotice -->
+      <section class="jsnotice">
+        <!-- TODO: wording of message in here -->
+        <p></p>
+      </section>
     </main>
 
     <footer id="site-footer">
       <hr>
       <small>
         ©
-        <!-- TODO: still doesn't pull the author name from "Hugo Themes" example site -->
-        {{ .Site.Params.author | default .Site.Author.name | default .Site.Author | default .Site.Title }},
-        <!-- TODO: config for initial copyright year -->
-        2020{{ if gt now.Year 2020 }}–{{ now.Format "2006" }}{{ end }}.
+        {{ $author | default .Site.Title }},
+        {{ with .Site.Params.oldestCopyrightYear | default 2020 }}
+        {{ . }}{{ if gt now.Year . }}–{{ now.Format "2006" }}{{ end }}.
+        {{ end }}
         <a href="https://creativecommons.org/licenses/by/4.0/" title="Creative Commons Attribution 4.0 International (CC BY 4.0)">Some rights reserved.</a>
         <!-- , please attribute properly and link back. -->
         <!-- TODO: {{ .Site.Copyright }} -->
@@ -236,12 +277,10 @@
         <!-- <span class="cc"></span>&nbsp;<span class="cc-by"></span> -->
         <!-- TODO: move these to colophone page -->
         <!-- This website is <a href="github-url">open-source</a>. -->
-        <!-- Proudly powered by <a href="TK">Hugo</a> and hosted by <a href="TK">TBD</a>. -->
+        <!-- Proudly powered by <a href="https://gohugo.io/">Hugo</a> and hosted by <a href="TK">TBD</a>. -->
         <!-- TODO: translation multilingual switcher -->
       </small>
     </footer>
-
-    <!-- TODO: django-debug-toolbar like sidebar showing printf of all variables on the page, including Hugo ones, build.writeStats file reading -->
 
     <!-- TODO: type="module" in the <head> instead? -->
     <script type="text/javascript">

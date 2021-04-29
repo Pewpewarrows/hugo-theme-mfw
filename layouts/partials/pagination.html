@@ -40,9 +40,14 @@
           <a class="page-link" href="{{ .URL }}" aria-label="Last"><span aria-hidden="true">»</span></a>
         </li>
       {{ end }}
-
-      <!-- TODO: page input to jump to specific page -->
-      <!-- TODO: summary information: Showing 1-10 of 503 items -->
     </ol>
+
+    <!-- TODO: adjustable page size? -->
+    <!-- TODO: page input to jump to specific page -->
+
+    {{ $firstIndex := add 1 (sub (mul $pag.PageNumber $pag.PageSize) $pag.PageSize) }}
+    {{ $lastIndex := sub 1 (add $firstIndex $pag.NumberOfElements) }}
+    <!-- TODO: more specific term than generic "items" -->
+    <p>Showing {{ $firstIndex }}–{{ $lastIndex }} of {{ $pag.TotalNumberOfElements }} items</p>
   </nav>
 {{ end }}

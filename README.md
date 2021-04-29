@@ -1,6 +1,6 @@
 # hugo-theme-mfw
 
-Minimal [Hugo](https://gohugo.io/) theme inspired by [Motherfucking Website](http://motherfuckingwebsite.com/) and its descendants
+Minimal [Hugo](https://gohugo.io/) theme inspired by [Motherfucking Website](http://motherfuckingwebsite.com/) and its descendants, as well as Jeremy Thomas' [Web Design in 4 Minutes](https://jgthms.com/web-design-in-4-minutes/)
 
 ## Installation
 
@@ -37,6 +37,9 @@ TODO: update hugo to latest, taxonomy and taxonomyTerm are now term and taxonomy
 TODO: hugo modules? especially for js build systems?
 TODO: customized simple versions of social shortcodes (insta, twitter, etc)
 
+- [ ] .Site.Params.title is used in opengraph template instead of .Site.Title
+- [ ] evaluate generated html for whitespace to remove with {{- -}}
+
 ## Github Issues
 
 TODO: shortcodes for info/warning boxes
@@ -51,6 +54,14 @@ TODO: img, figure (maybe, if better than built-in), imgproc shortcodes: <https:/
 TODO: github bots: dependabot, others? <https://probot.github.io/apps/> <https://dev.to/pierre/automation--use-githubs-bots-to-increase-your-productivity--30j5>
 TODO: render TOC as an ol instead of ul
 TODO: placeholder shortcode templates for rest of embeds that require external API calls during build
+
+- [ ] add schema.org and JSON-LD metadata to head and individual elements
+- [ ] equivalent to django-debug-toolbar (see <https://github.com/JugglerX/hugo-debug-bar> for prototype), showing printf of all variables on the page, including Hugo ones, build.writeStats file reading
+  - <https://github.com/zwbetz-gh/starter-hugo-debug-site/blob/master/layouts/partials/debug-table.html>
+  - <https://github.com/kaushalmodi/hugo-debugprint>
+  - <https://github.com/danielfdickinson/hugoDebugTables>
+  - <https://discourse.gohugo.io/t/easier-debugging-hugo-variables-using-the-javascript-console/22873>
+- [ ] automated scanner/linter to ensure that ref is used instead of relref in syndicated content (allows links to be clicked when read from feed reader), also ensure images are absolute URLs too
 
 ## Place in Other Themes
 
