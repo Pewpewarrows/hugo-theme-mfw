@@ -36,9 +36,11 @@ TODO: closing comments for all html ids or significant classes with large blocks
 TODO: update hugo to latest, taxonomy and taxonomyTerm are now term and taxonomy, respectively
 TODO: hugo modules? especially for js build systems?
 TODO: customized simple versions of social shortcodes (insta, twitter, etc)
+TODO: as part of i18n will want to use that template tag for all static text (like "minute read")
 
 - [ ] .Site.Params.title is used in opengraph template instead of .Site.Title
 - [ ] evaluate generated html for whitespace to remove with {{- -}}
+- [ ] improved default RSS template with images <https://github.com/brunoamaral/future-imperfect-DI/blob/master/layouts/_default/rss.xml>
 
 ## Github Issues
 
@@ -56,12 +58,14 @@ TODO: render TOC as an ol instead of ul
 TODO: placeholder shortcode templates for rest of embeds that require external API calls during build
 
 - [ ] add schema.org and JSON-LD metadata to head and individual elements
+  - <https://github.com/brunoamaral/future-imperfect-DI/blob/master/layouts/_default/baseof.html>
 - [ ] equivalent to django-debug-toolbar (see <https://github.com/JugglerX/hugo-debug-bar> for prototype), showing printf of all variables on the page, including Hugo ones, build.writeStats file reading
   - <https://github.com/zwbetz-gh/starter-hugo-debug-site/blob/master/layouts/partials/debug-table.html>
   - <https://github.com/kaushalmodi/hugo-debugprint>
   - <https://github.com/danielfdickinson/hugoDebugTables>
   - <https://discourse.gohugo.io/t/easier-debugging-hugo-variables-using-the-javascript-console/22873>
 - [ ] automated scanner/linter to ensure that ref is used instead of relref in syndicated content (allows links to be clicked when read from feed reader), also ensure images are absolute URLs too
+- [ ] adjustable page size would require pre-rendering lots of various options, but might be worth exploring
 
 ## Place in Other Themes
 

@@ -2,6 +2,7 @@
   <article>
     <header>
       <h1>{{ partial "page-title-link" (dict "page" .) }}</h1>
+      <!-- TODO: .Params.subtitle -->
       <span class="text-muted">{{ partial "page-datetime" (dict "page" . "date" .Date) }}</span>
       <span class="text-muted">&nbsp;—&nbsp;</span>
       <span class="text-muted">{{ .ReadingTime }} minute read</span>
@@ -95,7 +96,7 @@
           translated:
           <ul class="unstyled inline">
             {{ range . }}
-              <li><a href="TK">translation-lang</a></li>
+              <li><a href="{{ .Permalink }}">{{ .Language.LanguageName }}</a></li>
             {{ end }}
           </ul>
         </span>

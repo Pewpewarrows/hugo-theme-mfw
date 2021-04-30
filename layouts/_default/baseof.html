@@ -6,6 +6,7 @@
 <!doctype html>
 <!-- TODO: get defaultContentLanguage working -->
 <!-- TODO: prefix="og: http://ogp.me/ns#" -->
+<!-- use .Lang first, default to defaultContentLanguage otherwise? -->
 <html class="no-js" lang="{{ .Site.Data.defaultContentLanguage }}">
   <head>
     <meta charset="utf-8">
@@ -13,6 +14,7 @@
 
     <!-- TODO: configurable titleSeparator -->
     <!-- TODO: show page number if applicable -->
+    {{/* page {{ .Paginator.PageNumber }} of {{ .Paginator.TotalPages }} */}}
     <title>{{ with .Title }}{{ . }} · {{ end }}{{ .Site.Title }}</title>
 
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
@@ -44,11 +46,22 @@
     {{ with .Site.Params.baiduSiteVerification }}
     <meta name="baidu-site-verification" content="{{ . }}">
     {{ end }}
+    
+    {{ if .Params.unlisted }}
+    <meta name="robots" content="noindex, nofollow">
+    {{ end }}
 
     <base href="{{ .Site.BaseURL }}">
     <link href="{{ .Permalink }}" rel="canonical">
-    {{ if .HasPrev }}<link href="{{ .Prev.URL }}" rel="prev">{{ end }}
-    {{ if .HasNext }}<link href="{{ .Next.URL }}" rel="next">{{ end }}
+    {{ if .Paginator.HasPrev }}<link href="{{ .Paginator.Prev.URL }}" rel="prev">{{ end }}
+    {{ if .Paginator.HasNext }}<link href="{{ .Paginator.Next.URL }}" rel="next">{{ end }}
+    
+    <link rel="alternate" href="{{ .Permalink }}" hreflang="{{ .Lang }}">
+	{{ if .IsTranslated }}
+	    {{ range .Translations }}
+	<link rel="alternate" href="{{ .Permalink }}" hreflang="{{ .Lang }}">
+	    {{ end}}
+	{{ end }}
 
     <!-- <link href="//example.com" rel="dns-prefetch"> -->
     <!-- <link href="/favicon.ico" rel="shortcut icon"> -->
@@ -68,10 +81,11 @@
     <!-- TODO: switch to ATOM feeds instead of RSS -->
     <!-- <link href="/atom.xml" title="{{ .Site.Title }} ATOM Feed" rel="alternate" type="application/atom+xml"> -->
 
-    <!-- TODO: default templates may not have all elements, such as twitter:creator or fb:app_id -->
+    <!-- TODO: default templates may not have all elements, such as twitter:creator or fb:app_id, see: https://github.com/brunoamaral/future-imperfect-DI/blob/master/layouts/_default/baseof.html -->
     {{ template "_internal/schema.html" . }}
     {{ template "_internal/opengraph.html" . }}
     {{ template "_internal/twitter_cards.html" . }}
+    {{ template "_internal/google_news.html" . }}
 
     <!-- TODO: opensearch plugin -->
     <!-- TODO: https://htmlhead.dev/ -->
